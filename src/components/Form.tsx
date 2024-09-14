@@ -1,6 +1,8 @@
 'use client';
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faStar } from '@fortawesome/free-solid-svg-icons';  // Filled star
 import React, { useState } from 'react';
+import axios from 'axios'
 
 interface Definition {
   definition: string;
@@ -16,6 +18,7 @@ function Form() {
   const [definitions, setDefinitions] = useState<Definition[] | null>(null);
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
+  const [isFavorite, setIsFavorite] = useState<boolean > (false)
 
   const inputHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setText(e.target.value);
@@ -29,23 +32,46 @@ function Form() {
       setAudioUrl(null);
 
       try {
-        const resp = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${text}`);
-        const jsonResponse = await resp.json();
+        const resp = await axios.get(`https://api.dictionaryapi.dev/api/v2/entries/en/${text}`);
+        console.log(resp.data)
+        // Handle HTTP errors
+        if (resp.status === 200) {
+          const jsonResponse = await resp.data;
 
-        // Extract audio 
-        const firstAudioUrl = jsonResponse[0].phonetics[1]?.audio ;
-        //Extract first 5 defintion
-        const allDefinitions = jsonResponse[0].meanings.flatMap((meaning: Meaning) => meaning.definitions).slice(0, 5);
+          // Extract audio 
+          const firstAudioUrl = jsonResponse[0].phonetics[1]?.audio ;
+          //Extract first 5 defintion
+          const allDefinitions = jsonResponse[0].meanings.flatMap((meaning: Meaning) => meaning.definitions).slice(0, 5);
           setDefinitions(allDefinitions);
           setAudioUrl(firstAudioUrl);
+          
+           // Check if the word is already saved in session as favorite
+          const isFav = sessionStorage.getItem(text) === 'true';  
+          setIsFavorite(isFav);  
+        }
+        else {
+          setMessage('No Definitions Found');
+        }      
+
         } catch (error) {
         console.error('Error fetching data:', error);
-        setMessage('Definition not found');  //error message if there is no definition found
+        setMessage('Definition not found'); 
       }
     } else {
       setMessage("Enter a word to search") // if user search without entering
     }
   };
+    
+  const handleFavorite = () => {
+    const updateFav = !isFavorite
+    setIsFavorite(updateFav);
+
+    if (updateFav) {
+      sessionStorage.setItem(text, 'true');  // Save as favorite
+    } else {
+      sessionStorage.removeItem(text);  // Remove from favorites
+    }
+  }
 
   return (
     <div className='flex flex-col p-4'>
@@ -65,14 +91,21 @@ function Form() {
         {audioUrl && (
           <div className='mt-4'>
             <h3 className='text-lg font-bold'>Pronunciation:</h3>
-            <audio controls>
+            <audio data-testid="audio" controls>
               <source src={audioUrl} type='audio/mp3' />
             </audio>
           </div>
         )}
         {/* Display definitions and exampl */}
         {definitions ? (
-          <div>
+          <div>            
+            <div>
+              <FontAwesomeIcon data-testid='favorite'
+                icon={faStar }
+                className={`${isFavorite ? 'text-teal-600' : 'text-gray-300'}`}
+                size="2x" onClick={handleFavorite}
+              />
+            </div>
             <div className='mt-4'>
               <h3 className='text-lg font-bold'>Definitions:</h3>
               <ul>

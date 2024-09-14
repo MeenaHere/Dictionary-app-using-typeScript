@@ -11,7 +11,7 @@ describe('App Component', () => {
     //get h1 tag and check it has Dictionary word
     const h1tag = screen.getByRole('heading');
     expect(h1tag).toBeInTheDocument();
-    expect(within(h1tag).getByText('Dictionary'))
+    expect(within(h1tag).getByText(/Dictionary/))
   });
   
    it('toggle dark mode on icon click', async () => {
