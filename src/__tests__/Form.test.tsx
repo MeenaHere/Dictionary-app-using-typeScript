@@ -24,6 +24,7 @@ afterAll(() => server.close());
 
 describe('Form Component', () => {
 
+  //this test is crucial as these are the most important elemnt that are used by the user to intract with the app.
   it('renders the form with input and search button', () => {
     render(<Form />);
     //get the input and button
@@ -35,6 +36,7 @@ describe('Form Component', () => {
     expect(button).toBeInTheDocument();
   });
 
+  //This test ensure that user is properly able to right in the input field.
   it('updates input value when typing', () => {
     render(<Form />);
 
@@ -45,6 +47,8 @@ describe('Form Component', () => {
     //check if the typed input is present in input field
     expect(input).toHaveValue('example');
   });
+
+  // this test is essential as it will test the core functionality of the app that user will successfuly able to search what it want and all the filed like audio, and definitions are available after search 
 
   it('displays definitions and audio when search is successful', async () => {
     render(<Form />);
@@ -72,6 +76,7 @@ describe('Form Component', () => {
   });
   });
 
+  // this test is impotant as it will check that the error message is correctly displayed if the definition is not found
   it('displays an error message when no definitions are found', async () => {
     render(<Form />);
     
@@ -88,6 +93,7 @@ describe('Form Component', () => {
     });
   });
 
+  //this test verify that it should show correct error message if user doent enter anything to search
   it('displays a error message when input is empty', () => {
     render(<Form />);
     
@@ -98,6 +104,7 @@ describe('Form Component', () => {
     expect(screen.getByText(/Enter a word to search/)).toBeInTheDocument();
   });
 
+  // this test is necessary to check that user is successfully able to save any searched word as favorite, the word is also saved in session as true and after clicking one more time it should be removed from the session
   it('save favorite word in session storage', async () => {
     render(<Form />);
 

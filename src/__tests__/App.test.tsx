@@ -6,6 +6,7 @@ import App from '../App';
 
 
 describe('App Component', () => {
+  //The purpose of this test is to verify that the main heading/logo of the app is present as it is key identifier 
   it('should render the heading', () => {
     render(<App />);
     //get h1 tag and check it has Dictionary word
@@ -13,8 +14,9 @@ describe('App Component', () => {
     expect(h1tag).toBeInTheDocument();
     expect(within(h1tag).getByText(/Dictionary/))
   });
-  
-   it('toggle dark mode on icon click', async () => {
+
+  //This test is very important to check the accessibility of light and dark mode  and correct classes are applied on clicking particular class 
+  it('toggle dark mode on icon click', async () => {
     render(<App />);
     
     // check initial theme
@@ -33,6 +35,8 @@ describe('App Component', () => {
       expect(localStorage.getItem('darkMode')).toBe('true');
     });
   });
+
+  //This test  verify that the form componnent is render when we see the main page so with this test we see that the input field and button is loaded when the app renders
 
   it('renders the Form component correctly', () => {
     render(<App />);
