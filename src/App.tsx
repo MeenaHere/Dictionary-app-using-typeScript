@@ -20,21 +20,28 @@ function App() {
   };
 
   return (
-    <div data-testid="main-div"
-      className={`flex w-full min-h-screen flex-col items-center pt-4 ${darkMode ? 'bg-gray-900 text-white' : 'bg-white text-black'}`}
+    <div
+      data-testid="main-div"
+      className={`flex min-h-screen flex-col pt-4 ${
+        darkMode ? "bg-gray-900 text-white" : "bg-white text-black"
+      }`}
     >
-      <header className='flex w-full justify-between items-center px-4'>
+      <header className="flex w-full justify-between items-center px-4">
         <div className="flex-1 text-center">
-          <h1 className='protest-guerrilla-regular text-teal-600 text-xl'>📚 <span className='underline'>Dictionary</span></h1>
+          <h1 className="protest-guerrilla-regular text-teal-600 text-xl">
+            📚 <span className="underline">Dictionary</span>
+          </h1>
         </div>
-        <div className='text-xl cursor-pointer' data-testid={"toggle-theme"} onClick={handleTheme}>
+        <div
+          className="text-xl cursor-pointer"
+          data-testid={"toggle-theme"}
+          onClick={handleTheme}
+        >
           <FontAwesomeIcon icon={darkMode ? faSun : faMoon} />
         </div>
-      </header>      
-      <div className="items-center pt-8">
-        <div className="search-container">  
-          <Form />
-        </div>
+      </header>
+      <div className="pt-8">
+        <Form />
       </div>
     </div>
   );
